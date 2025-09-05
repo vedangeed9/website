@@ -1,105 +1,107 @@
 "use client"
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link"; // Changed from react-router-dom to next/link
-import { ArrowRight, Brain, Database, Lightbulb, Zap, Shield, TrendingUp } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { Button } from "@/components/ui/button"
+import type React from "react"
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import Link from "next/link"
+import { ArrowRight, Brain, Database, Lightbulb, Zap, Shield, TrendingUp } from "lucide-react"
+import { useEffect, useState, useRef } from "react"
 
 const TypewriterText = ({ text, delay = 100 }: { text: string; delay?: number }) => {
-  const [displayText, setDisplayText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("")
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
     if (currentIndex < text.length) {
       const timeout = setTimeout(() => {
-        setDisplayText((prev) => prev + text[currentIndex]);
-        setCurrentIndex((prev) => prev + 1);
-      }, delay);
-      return () => clearTimeout(timeout);
+        setDisplayText((prev) => prev + text[currentIndex])
+        setCurrentIndex((prev) => prev + 1)
+      }, delay)
+      return () => clearTimeout(timeout)
     }
-  }, [currentIndex, text, delay]);
+  }, [currentIndex, text, delay])
 
   return (
     <span>
       {displayText}
       <span className="animate-pulse">|</span>
     </span>
-  );
-};
+  )
+}
 
 const AnimatedCounter = ({ value, duration = 2000 }: { value: string; duration?: number }) => {
-  const [count, setCount] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [count, setCount] = useState(0)
+  const [isVisible, setIsVisible] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
+          setIsVisible(true)
         }
       },
-      { threshold: 0.1 }
-    );
+      { threshold: 0.1 },
+    )
 
     if (ref.current) {
-      observer.observe(ref.current);
+      observer.observe(ref.current)
     }
 
-    return () => observer.disconnect();
-  }, []);
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible) return
 
-    const numericValue = Number.parseInt(value.replace(/\D/g, ""));
-    if (isNaN(numericValue)) return;
+    const numericValue = Number.parseInt(value.replace(/\D/g, ""))
+    if (isNaN(numericValue)) return
 
-    let startTime: number;
+    let startTime: number
     const animate = (currentTime: number) => {
-      if (!startTime) startTime = currentTime;
-      const progress = Math.min((currentTime - startTime) / duration, 1);
+      if (!startTime) startTime = currentTime
+      const progress = Math.min((currentTime - startTime) / duration, 1)
 
-      setCount(Math.floor(progress * numericValue));
+      setCount(Math.floor(progress * numericValue))
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        requestAnimationFrame(animate)
       }
-    };
+    }
 
-    requestAnimationFrame(animate);
-  }, [isVisible, value, duration]);
+    requestAnimationFrame(animate)
+  }, [isVisible, value, duration])
 
-  const suffix = value.replace(/\d/g, "");
+  const suffix = value.replace(/\d/g, "")
 
   return (
     <div ref={ref} className="text-2xl md:text-3xl font-bold text-white mb-1">
       {count}
       {suffix}
     </div>
-  );
-};
+  )
+}
 
 const ScrollReveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => setIsVisible(true), delay);
+          setTimeout(() => setIsVisible(true), delay)
         }
       },
-      { threshold: 0.1 }
-    );
+      { threshold: 0.1 },
+    )
 
     if (ref.current) {
-      observer.observe(ref.current);
+      observer.observe(ref.current)
     }
 
-    return () => observer.disconnect();
-  }, [delay]);
+    return () => observer.disconnect()
+  }, [delay])
 
   return (
     <div
@@ -108,8 +110,8 @@ const ScrollReveal = ({ children, delay = 0 }: { children: React.ReactNode; dela
     >
       {children}
     </div>
-  );
-};
+  )
+}
 
 const features = [
   {
@@ -119,7 +121,7 @@ const features = [
     gradient: "from-primary/20 to-primary/10",
   },
   {
-    title: "Data Engineering", 
+    title: "Data Engineering",
     description: "Streamline data pipelines for actionable insights and better decision making.",
     icon: Database,
     gradient: "from-secondary/20 to-secondary/10",
@@ -130,7 +132,7 @@ const features = [
     icon: Lightbulb,
     gradient: "from-accent/20 to-accent/10",
   },
-];
+]
 
 const testimonials = [
   {
@@ -141,26 +143,26 @@ const testimonials = [
   },
   {
     quote: "Their AI solutions helped us reduce operational costs by 40% while improving accuracy.",
-    author: "Michael Rodriguez", 
+    author: "Michael Rodriguez",
     company: "DataFlow Solutions",
     image: "/testimonial2.jpg",
   },
-];
+]
 
 const stats = [
   { value: "500+", label: "AI Models Deployed" },
   { value: "98%", label: "Client Satisfaction" },
   { value: "40%", label: "Average Cost Reduction" },
   { value: "24/7", label: "Support Coverage" },
-];
+]
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-accent to-secondary">
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900">
         {/* Tech pattern background */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-20">
           <div
             className="absolute inset-0 animate-pulse"
             style={{
@@ -171,20 +173,20 @@ const Index = () => {
         </div>
 
         <div className="relative container mx-auto px-6 py-24 lg:py-32">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium mb-8 animate-[slideUp_0.8s_ease-out]">
-              <Zap className="w-4 h-4 animate-pulse" />
+          <div className="max-w-6xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 bg-gray-800/80 text-gray-200 px-4 py-2 rounded-full text-sm font-medium mb-8 animate-[slideUp_0.8s_ease-out] border border-gray-700">
+              <Zap className="w-4 h-4 animate-pulse text-blue-400" />
               Powering the Future of AI
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-balance text-white">
+            <h1 className="text-4xl md:text-6xl lg:text-6xl font-bold mb-12 text-balance text-white">
               Transform Your Business with
-              <span className="block bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
                 <TypewriterText text="Advanced AI" delay={150} />
               </span>
             </h1>
 
-            <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto text-pretty animate-[fadeIn_1s_ease-out_0.5s_both]">
+            <p className="text-xl md:text-xl text-gray-300 mb-12 max-w-3xl mx-auto text-pretty animate-[fadeIn_1s_ease-out_0.5s_both]">
               Data excellence powered by cutting-edge machine learning and AI. We help enterprises unlock the full
               potential of their data infrastructure.
             </p>
@@ -193,7 +195,7 @@ const Index = () => {
               <Button
                 asChild
                 size="lg"
-                className="bg-white text-primary hover:bg-white/90 group animate-[slideUp_0.8s_ease-out_0.8s_both] hover:scale-105 transition-all duration-300"
+                className="bg-gray-800 text-white hover:bg-gray-700 border border-gray-600 group animate-[slideUp_0.8s_ease-out_0.8s_both] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 <Link href="/contact" className="flex items-center gap-2">
                   Get Started
@@ -204,7 +206,7 @@ const Index = () => {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-white/30 text-white hover:bg-white/10 bg-transparent animate-[slideUp_0.8s_ease-out_1s_both] hover:scale-105 transition-all duration-300"
+                className="border-gray-600 text-gray-200 hover:bg-gray-800/50 bg-gray-900/30 animate-[slideUp_0.8s_ease-out_1s_both] hover:scale-105 transition-all duration-300 backdrop-blur-sm"
               >
                 <Link href="/services">Explore Solutions</Link>
               </Button>
@@ -215,7 +217,7 @@ const Index = () => {
                 <ScrollReveal key={index} delay={index * 100}>
                   <div className="text-center group hover:scale-110 transition-transform duration-300">
                     <AnimatedCounter value={stat.value} />
-                    <div className="text-sm text-white/80">{stat.label}</div>
+                    <div className="text-sm text-gray-400">{stat.label}</div>
                   </div>
                 </ScrollReveal>
               ))}
@@ -237,7 +239,7 @@ const Index = () => {
 
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {features.map((feature, index) => {
-                const IconComponent = feature.icon;
+                const IconComponent = feature.icon
                 return (
                   <ScrollReveal key={index} delay={index * 200}>
                     <Card className="group hover:shadow-xl transition-all duration-500 border border-border/50 bg-card hover:scale-105 hover:-translate-y-2">
@@ -261,7 +263,7 @@ const Index = () => {
                       </CardContent>
                     </Card>
                   </ScrollReveal>
-                );
+                )
               })}
             </div>
           </div>
@@ -270,12 +272,12 @@ const Index = () => {
 
       {/* About Section */}
       <ScrollReveal>
-        <section className="py-24 bg-gradient-to-br from-secondary to-accent">
+        <section className="py-24 bg-gradient-to-br from-slate-900 via-gray-800 to-slate-800">
           <div className="container mx-auto px-6">
             <div className="max-w-4xl mx-auto">
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
-                  <div className="inline-flex items-center gap-2 bg-white/20 text-white px-3 py-1 rounded-full text-sm font-medium mb-6 animate-pulse">
+                  <div className="inline-flex items-center gap-2 bg-gray-700/80 text-gray-200 px-3 py-1 rounded-full text-sm font-medium mb-6 animate-pulse border border-gray-600">
                     <Shield className="w-4 h-4" />
                     Trusted Innovation
                   </div>
@@ -288,7 +290,7 @@ const Index = () => {
                   <Button
                     asChild
                     variant="outline"
-                    className="border-white/30 text-white hover:bg-white/10 bg-transparent hover:scale-105 transition-all duration-300"
+                    className="border-gray-600 text-gray-200 hover:bg-gray-700/50 bg-gray-800/30 hover:scale-105 transition-all duration-300 backdrop-blur-sm"
                   >
                     <Link href="/about" className="flex items-center gap-2">
                       Our Story
@@ -297,8 +299,8 @@ const Index = () => {
                   </Button>
                 </div>
                 <div className="relative">
-                  <div className="aspect-square bg-gradient-to-br from-white/20 to-white/10 rounded-2xl flex items-center justify-center animate-[float_3s_ease-in-out_infinite]">
-                    <Brain className="w-24 h-24 text-white/40 animate-pulse" />
+                  <div className="aspect-square bg-gradient-to-br from-gray-700/40 to-gray-800/30 rounded-2xl flex items-center justify-center animate-[float_3s_ease-in-out_infinite] border border-gray-600/30">
+                    <Brain className="w-24 h-24 text-gray-400 animate-pulse" />
                   </div>
                 </div>
               </div>
@@ -341,7 +343,7 @@ const Index = () => {
                           alt={testimonial.author}
                           className="w-12 h-12 rounded-full object-cover bg-muted hover:scale-110 transition-transform duration-300"
                           onError={(e) => {
-                            e.currentTarget.src = `https://ui-avatars.com/api/?name=${testimonial.author}&background=609380&color=fff`;
+                            e.currentTarget.src = `https://ui-avatars.com/api/?name=${testimonial.author}&background=609380&color=fff`
                           }}
                         />
                         <div>
@@ -380,13 +382,13 @@ const Index = () => {
 
       {/* CTA Section */}
       <ScrollReveal>
-        <section className="py-24 relative overflow-hidden bg-gradient-to-br from-primary to-accent">
+        <section className="py-24 relative overflow-hidden bg-gradient-to-br from-slate-900 via-gray-800 to-slate-800">
           <div className="absolute inset-0 opacity-10">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:20px_20px] animate-[drift_10s_linear_infinite]" />
           </div>
 
           <div className="relative container mx-auto px-6 text-center max-w-4xl">
-            <div className="inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium mb-8 animate-pulse">
+            <div className="inline-flex items-center gap-2 bg-gray-700/80 text-gray-200 px-4 py-2 rounded-full text-sm font-medium mb-8 animate-pulse border border-gray-600">
               <TrendingUp className="w-4 h-4" />
               Ready to Scale?
             </div>
@@ -402,7 +404,7 @@ const Index = () => {
               <Button
                 asChild
                 size="lg"
-                className="bg-white text-primary hover:bg-white/90 hover:scale-105 transition-all duration-300"
+                className="bg-gray-800 text-white hover:bg-gray-700 border border-gray-600 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 <Link href="/contact" className="flex items-center gap-2">
                   Start Your Journey
@@ -413,7 +415,7 @@ const Index = () => {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-white/20 text-white hover:bg-white/10 bg-transparent hover:scale-105 transition-all duration-300"
+                className="border-gray-600 text-gray-200 hover:bg-gray-700/50 bg-gray-800/30 hover:scale-105 transition-all duration-300 backdrop-blur-sm"
               >
                 <Link href="/demo">Book a Demo</Link>
               </Button>
@@ -422,7 +424,7 @@ const Index = () => {
         </section>
       </ScrollReveal>
     </div>
-  );
-};
+  )
+}
 
-export default Index;
+export default Index
