@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import SafeImage from "@/components/ui/safe-image"
 
-export const dynamic = "error" 
+export const dynamic = "error" // SSG
 
 const products = [
   {
